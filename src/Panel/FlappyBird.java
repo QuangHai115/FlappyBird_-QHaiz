@@ -1,6 +1,7 @@
 package Panel;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -95,7 +96,7 @@ public class FlappyBird extends GameScreen {
             for (int i = 0; i < PipeGroup.size; i++) {
                 if (bird.getRect().intersects(pipeGroup.getPipe(i).getRect())) {
                     if (bird.isLive())
-                        bird.pong_sound.play();
+                        bird.collideSound.play();
                     bird.setLive(false);
                     CurrentScreen = GAMEOVER_SCREEN;
                 }
@@ -106,13 +107,14 @@ public class FlappyBird extends GameScreen {
                         && i % 2 == 0) {
                     point++;
                     pipeGroup.getPipe(i).setPass(true);
-                    bird.point_sound.play();
+                    bird.pointSound.play();
 
                 }
             }
 
             if (bird.getPosY() + bird.getH() > 596) {
                 CurrentScreen = GAMEOVER_SCREEN;
+                bird.collideSound.play();
             }
 
         }
@@ -136,6 +138,7 @@ public class FlappyBird extends GameScreen {
 
         if (CurrentScreen == GAMEOVER_SCREEN || CurrentScreen == GAMEPLAY_SCREEN) {
             g2.setColor(Color.red);
+            g2.setFont(new Font("Arial", Font.BOLD, 30));
             g2.drawString("Point: " + point, 30, 40);
 
         }

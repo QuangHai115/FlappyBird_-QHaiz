@@ -15,14 +15,14 @@ public class Bird extends Objects {
 
     private boolean isLive = true;
 
-    public SoundPlayer flap_sound, pong_sound, point_sound, game_sound;
+    public SoundPlayer flapSound, collideSound, pointSound, game_sound;
 
     public Bird(int x, int y, int w, int h) {
         super(x, y, w, h);
         rect = new Rectangle(x, y, w, h);
-        flap_sound = new SoundPlayer(new File("Stock/fap.wav"));
-        pong_sound = new SoundPlayer(new File("Stock/fall.wav"));
-        point_sound = new SoundPlayer(new File("Stock/getpoint.wav"));
+        flapSound = new SoundPlayer(new File("Stock/fap.wav"));
+        collideSound = new SoundPlayer(new File("Stock/fall.wav"));
+        pointSound = new SoundPlayer(new File("Stock/getpoint.wav"));
     }
 
     public Bird() {
@@ -71,7 +71,7 @@ public class Bird extends Objects {
     public void fly() {
         vt = -3;
 
-        flap_sound.play();
+        flapSound.play();
 
     }
 
