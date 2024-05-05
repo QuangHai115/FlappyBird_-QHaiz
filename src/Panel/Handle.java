@@ -17,7 +17,7 @@ import java.awt.event.MouseEvent;
 
 import Menu.*;
 
-public class FlappyBird extends GameScreen {
+public class Handle extends GameScreen {
     private BufferedImage birds;
     private Animation bird_anim;
     private BufferedImage word;
@@ -55,7 +55,7 @@ public class FlappyBird extends GameScreen {
 
     public static Bird h = new Bird();
 
-    public FlappyBird() {
+    public Handle() {
         super(800, 600);
 
         try {
@@ -117,11 +117,6 @@ public class FlappyBird extends GameScreen {
 
         setLocationRelativeTo(null);
         BeginGame();
-
-    }
-
-    public static void main(String[] args) {
-        new FlappyBird();
 
     }
 

@@ -55,7 +55,7 @@ public class Bird extends Objects {
     }
 
     public void update(long deltaTime) {
-        vt += FlappyBird.g;
+        vt += Handle.g;
         this.setPosY(this.getPosY() + vt);
         if (this.getPosY() < 0) {
             this.setPosY(0);
@@ -71,7 +71,7 @@ public class Bird extends Objects {
 
     public void fly() {
         vt = -3;
-        if (!FlappyBird.turnonMusic)
+        if (!Handle.turnonMusic)
             flapSound.play();
 
     }

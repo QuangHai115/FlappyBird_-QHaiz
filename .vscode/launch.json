@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "main",
+            "request": "launch",
+            "mainClass": "PlayGameInHere.main",
+            "projectName": "FlappyBird_QHaiz_a3d3165"
+        },
+        {
+            "type": "java",
+            "name": "Handle",
+            "request": "launch",
+            "mainClass": "Panel.Handle",
+            "projectName": "FlappyBird_QHaiz_a3d3165"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
