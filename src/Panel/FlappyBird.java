@@ -4,12 +4,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import Menu.*;
 
@@ -20,6 +24,18 @@ public class FlappyBird extends GameScreen {
     private BufferedImage start;
     private BufferedImage bg;
     private BufferedImage gameOverimg;
+
+    private BufferedImage musicSprite;
+    private BufferedImage musicOn;
+    private BufferedImage musicOff;
+
+    private BufferedImage soundSprite;
+    private BufferedImage soundOn;
+    private BufferedImage soundOff;
+
+    public static boolean turnonMusic = false;
+
+    public static boolean turnonSound = false;
 
     public static float g = 0.1f;
 
@@ -44,8 +60,17 @@ public class FlappyBird extends GameScreen {
 
         try {
             birds = ImageIO.read(new File("Stock/bird_sprite.png"));
-            bg = ImageIO.read(new File("Stock/2.jpg"));
+            bg = ImageIO.read(new File("Stock/background.jpg"));
             gameOverimg = ImageIO.read(new File("Stock/gameOver2.png"));
+
+            musicSprite = ImageIO.read(new File("Stock/music.png"));
+            musicOn = musicSprite.getSubimage(0, 0, 60, 60);
+            musicOff = musicSprite.getSubimage(60, 0, 60, 60);
+
+            soundSprite = ImageIO.read(new File("Stock/sound.png"));
+            soundOn = soundSprite.getSubimage(0, 0, 60, 60);
+            soundOff = soundSprite.getSubimage(60, 0, 60, 60);
+
         } catch (IOException e) {
 
             e.printStackTrace();
@@ -64,6 +89,30 @@ public class FlappyBird extends GameScreen {
 
         bird = new Bird(100, 250, 50, 50);
         pipeGroup = new PipeGroup();
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getX() >= 60 && e.getX() <= 60 + musicOn.getWidth() &&
+                        e.getY() >= 60 && e.getY() <= 60 + musicOn.getHeight() &&
+                        CurrentScreen == BEGIN_SCREEN) {
+                    turnonMusic = !turnonMusic;
+                }
+
+                if (e.getX() >= 160 && e.getX() <= 160 + soundOn.getWidth() &&
+                        e.getY() >= 60 && e.getY() <= 60 + soundOn.getHeight() &&
+                        CurrentScreen == BEGIN_SCREEN) {
+                    turnonSound = !turnonSound;
+                }
+            }
+        });
+
+        // if (!turnonSound) {
+        // bird.soundTrack.playLoop();
+        // // turnonSound = !turnonSound;
+        // } else {
+        // bird.soundTrack.stop();
+        // }
         setLocationRelativeTo(null);
         BeginGame();
 
@@ -88,14 +137,28 @@ public class FlappyBird extends GameScreen {
         if (CurrentScreen == BEGIN_SCREEN) {
             reStart();
         } else if (CurrentScreen == GAMEPLAY_SCREEN) {
-            if (bird.isLive())
+
+            if (!turnonSound) {
+                bird.soundTrack.playLoop();
+            } else {
+                bird.soundTrack.stop();
+            }
+
+            if (bird.isLive() && turnonMusic)
                 bird_anim.Update_Me(deltaTime);
             bird.update(deltaTime);
             pipeGroup.Update();
 
+            // if (!turnonSound) {
+            // bird.soundTrack.playLoop();
+            // // turnonSound = !turnonSound;
+            // } else {
+            // bird.soundTrack.stop();
+            // }
+
             for (int i = 0; i < PipeGroup.size; i++) {
                 if (bird.getRect().intersects(pipeGroup.getPipe(i).getRect())) {
-                    if (bird.isLive())
+                    if (!turnonMusic && bird.isLive())
                         bird.collideSound.play();
                     bird.setLive(false);
                     CurrentScreen = GAMEOVER_SCREEN;
@@ -107,16 +170,22 @@ public class FlappyBird extends GameScreen {
                         && i % 2 == 0) {
                     point++;
                     pipeGroup.getPipe(i).setPass(true);
-                    bird.pointSound.play();
+                    if (!turnonMusic)
+                        bird.pointSound.play();
 
                 }
             }
 
             if (bird.getPosY() + bird.getH() > 596) {
                 CurrentScreen = GAMEOVER_SCREEN;
-                bird.collideSound.play();
+                if (!turnonMusic)
+                    bird.collideSound.play();
             }
 
+        }
+
+        if (CurrentScreen == GAMEOVER_SCREEN) {
+            bird.soundTrack.stop();
         }
     }
 
@@ -132,6 +201,15 @@ public class FlappyBird extends GameScreen {
             bird_anim.PaintAnims((int) bird.getPosX(), (int) bird.getPosY(), birds, g2, 0, -1);
         }
 
+        if (CurrentScreen == BEGIN_SCREEN) {
+            BufferedImage MusicTest = turnonMusic ? musicOff : musicOn;
+            g2.drawImage(MusicTest, 50, 50, null);
+
+            BufferedImage SoundTest = turnonSound ? soundOff : soundOn;
+            g2.drawImage(SoundTest, 150, 50, null);
+
+        }
+
         if (CurrentScreen == GAMEOVER_SCREEN) {
             g2.drawImage(gameOverimg, 300, 240, 200, 120, null);
         }
@@ -140,8 +218,8 @@ public class FlappyBird extends GameScreen {
             g2.setColor(Color.red);
             g2.setFont(new Font("Arial", Font.BOLD, 30));
             g2.drawString("Point: " + point, 30, 40);
-
         }
+
     }
 
     @Override
@@ -152,6 +230,11 @@ public class FlappyBird extends GameScreen {
             } else if (CurrentScreen == GAMEPLAY_SCREEN) {
                 if (bird.isLive())
                     bird.fly();
+                if (!turnonSound) {
+                    bird.soundTrack.playLoop();
+                } else {
+                    bird.soundTrack.stop();
+                }
             } else if (CurrentScreen == GAMEOVER_SCREEN) {
                 CurrentScreen = BEGIN_SCREEN;
             }

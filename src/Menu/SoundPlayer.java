@@ -43,6 +43,15 @@ public class SoundPlayer {
             clip.stop();
     }
 
+    public void playLoop() {
+        if (clip != null) {
+            clip.setFramePosition(0);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } else {
+            System.out.println("Clip is Null");
+        }
+    }
+
     public void close() {
         clip.close();
     }
