@@ -35,7 +35,7 @@ public class FlappyBird extends GameScreen {
 
     public static boolean turnonMusic = false;
 
-    public static boolean turnonSound = false;
+    private boolean turnonSound = false;
 
     public static float g = 0.1f;
 
@@ -103,16 +103,18 @@ public class FlappyBird extends GameScreen {
                         e.getY() >= 60 && e.getY() <= 60 + soundOn.getHeight() &&
                         CurrentScreen == BEGIN_SCREEN) {
                     turnonSound = !turnonSound;
+
+                    if (!turnonSound) {
+                        bird.soundTrack.playLoop();
+                    } else {
+                        bird.soundTrack.stop();
+                    }
                 }
             }
         });
 
-        // if (!turnonSound) {
-        // bird.soundTrack.playLoop();
-        // // turnonSound = !turnonSound;
-        // } else {
-        // bird.soundTrack.stop();
-        // }
+        bird.soundTrack.playLoop();
+
         setLocationRelativeTo(null);
         BeginGame();
 
@@ -134,27 +136,16 @@ public class FlappyBird extends GameScreen {
 
     @Override
     public void GAME_UPDATE(long deltaTime) {
+
         if (CurrentScreen == BEGIN_SCREEN) {
+
             reStart();
         } else if (CurrentScreen == GAMEPLAY_SCREEN) {
-
-            if (!turnonSound) {
-                bird.soundTrack.playLoop();
-            } else {
-                bird.soundTrack.stop();
-            }
 
             if (bird.isLive() && turnonMusic)
                 bird_anim.Update_Me(deltaTime);
             bird.update(deltaTime);
             pipeGroup.Update();
-
-            // if (!turnonSound) {
-            // bird.soundTrack.playLoop();
-            // // turnonSound = !turnonSound;
-            // } else {
-            // bird.soundTrack.stop();
-            // }
 
             for (int i = 0; i < PipeGroup.size; i++) {
                 if (bird.getRect().intersects(pipeGroup.getPipe(i).getRect())) {
@@ -184,9 +175,6 @@ public class FlappyBird extends GameScreen {
 
         }
 
-        if (CurrentScreen == GAMEOVER_SCREEN) {
-            bird.soundTrack.stop();
-        }
     }
 
     @Override
@@ -230,11 +218,6 @@ public class FlappyBird extends GameScreen {
             } else if (CurrentScreen == GAMEPLAY_SCREEN) {
                 if (bird.isLive())
                     bird.fly();
-                if (!turnonSound) {
-                    bird.soundTrack.playLoop();
-                } else {
-                    bird.soundTrack.stop();
-                }
             } else if (CurrentScreen == GAMEOVER_SCREEN) {
                 CurrentScreen = BEGIN_SCREEN;
             }

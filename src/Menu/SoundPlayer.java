@@ -35,18 +35,23 @@ public class SoundPlayer {
             stop();
             clip.setFramePosition(0);
             clip.start();
+
         }
     }
 
     public void stop() {
-        if (clip.isRunning())
+        if (clip != null && clip.isRunning()) {
             clip.stop();
+
+        }
+
     }
 
     public void playLoop() {
         if (clip != null) {
             clip.setFramePosition(0);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
+
         } else {
             System.out.println("Clip is Null");
         }
@@ -55,4 +60,5 @@ public class SoundPlayer {
     public void close() {
         clip.close();
     }
+
 }
