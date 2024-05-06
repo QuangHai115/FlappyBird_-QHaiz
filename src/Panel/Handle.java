@@ -10,9 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import Menu.*;
@@ -20,10 +18,11 @@ import Menu.*;
 public class Handle extends GameScreen {
     private BufferedImage birds;
     private Animation bird_anim;
-    private BufferedImage word;
-    private BufferedImage start;
     private BufferedImage bg;
     private BufferedImage gameOverimg;
+
+    private BufferedImage settingImg;
+    private BufferedImage returnImg;
 
     private BufferedImage musicSprite;
     private BufferedImage musicOn;
@@ -32,6 +31,8 @@ public class Handle extends GameScreen {
     private BufferedImage soundSprite;
     private BufferedImage soundOn;
     private BufferedImage soundOff;
+
+    private boolean showSettings = false;
 
     public static boolean turnonMusic = false;
 
@@ -46,12 +47,12 @@ public class Handle extends GameScreen {
     private int BEGIN_SCREEN = 0;
     private int GAMEPLAY_SCREEN = 1;
     private int GAMEOVER_SCREEN = 2;
+    private int SETTING_SCREEN = 3;
+    private int HIGHSCORE_SCREEN = 4;
 
     private int CurrentScreen = BEGIN_SCREEN;
 
     private int point = 0;
-
-    private boolean test = false;
 
     public static Bird h = new Bird();
 
@@ -62,6 +63,8 @@ public class Handle extends GameScreen {
             birds = ImageIO.read(new File("Stock/bird_sprite.png"));
             bg = ImageIO.read(new File("Stock/background.jpg"));
             gameOverimg = ImageIO.read(new File("Stock/gameOver2.png"));
+            settingImg = ImageIO.read(new File("Stock/setting.png"));
+            returnImg = ImageIO.read(new File("Stock/return.png"));
 
             musicSprite = ImageIO.read(new File("Stock/music.png"));
             musicOn = musicSprite.getSubimage(0, 0, 60, 60);
@@ -93,23 +96,39 @@ public class Handle extends GameScreen {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getX() >= 60 && e.getX() <= 60 + musicOn.getWidth() &&
-                        e.getY() >= 60 && e.getY() <= 60 + musicOn.getHeight() &&
-                        CurrentScreen == BEGIN_SCREEN) {
-                    turnonMusic = !turnonMusic;
-                }
+                if (CurrentScreen == SETTING_SCREEN) {
+                    if (e.getX() >= 370 && e.getX() <= 370 + musicOn.getWidth() &&
+                            e.getY() >= 400 && e.getY() <= 400 + musicOn.getHeight()) {
+                        turnonMusic = !turnonMusic;
+                    }
 
-                if (e.getX() >= 160 && e.getX() <= 160 + soundOn.getWidth() &&
-                        e.getY() >= 60 && e.getY() <= 60 + soundOn.getHeight() &&
-                        CurrentScreen == BEGIN_SCREEN) {
-                    turnonSound = !turnonSound;
+                    if (e.getX() >= 370 && e.getX() <= 370 + soundOn.getWidth() &&
+                            e.getY() >= 320 && e.getY() <= 320 + soundOn.getHeight()) {
+                        turnonSound = !turnonSound;
 
-                    if (!turnonSound) {
-                        bird.soundTrack.playLoop();
-                    } else {
-                        bird.soundTrack.stop();
+                        if (!turnonSound) {
+                            bird.soundTrack.playLoop();
+                        } else {
+                            bird.soundTrack.stop();
+                        }
+                    }
+                    if (e.getX() >= 600 && e.getX() <= 600 + returnImg.getWidth() &&
+                            e.getY() >= 30 && e.getY() <= 30 + returnImg.getHeight()) {
+                        CurrentScreen = BEGIN_SCREEN;
                     }
                 }
+                if (CurrentScreen == BEGIN_SCREEN) {
+                    if (e.getX() >= 100 && e.getX() <= 100 + settingImg.getWidth() &&
+                            e.getY() >= 60 && e.getY() <= 60 + settingImg.getHeight() &&
+                            CurrentScreen == BEGIN_SCREEN) {
+                        showSettings = !showSettings;
+                    }
+                    if (showSettings) {
+                        CurrentScreen = SETTING_SCREEN;
+                        showSettings = !showSettings;
+                    }
+                }
+
             }
         });
 
@@ -169,27 +188,37 @@ public class Handle extends GameScreen {
             }
 
         }
+        if (CurrentScreen == SETTING_SCREEN) {
+
+        }
 
     }
 
     @Override
     public void GAME_PAINT(Graphics2D g2) {
-        g2.drawImage(bg, 0, 0, getWidth(), getHeight(), null);
+        g2.drawImage(bg, 0, 0, getWidth(), 600, null);
 
         pipeGroup.paint(g2);
-
-        if (!bird.getIsFlying() || CurrentScreen == BEGIN_SCREEN) {
-            bird_anim.PaintAnims((int) bird.getPosX(), (int) bird.getPosY(), birds, g2, 0, 0);
-        } else {
-            bird_anim.PaintAnims((int) bird.getPosX(), (int) bird.getPosY(), birds, g2, 0, -1);
+        if (CurrentScreen != SETTING_SCREEN) {
+            if (!bird.getIsFlying()) {
+                bird_anim.PaintAnims((int) bird.getPosX(), (int) bird.getPosY(), birds, g2, 0, 0);
+            } else {
+                bird_anim.PaintAnims((int) bird.getPosX(), (int) bird.getPosY(), birds, g2, 0, -1);
+            }
         }
 
         if (CurrentScreen == BEGIN_SCREEN) {
+            g2.drawImage(settingImg, 100, 50, null);
+        }
+
+        if (CurrentScreen == SETTING_SCREEN) {
             BufferedImage MusicTest = turnonMusic ? musicOff : musicOn;
-            g2.drawImage(MusicTest, 50, 50, null);
+            g2.drawImage(MusicTest, 370, 400, null);
 
             BufferedImage SoundTest = turnonSound ? soundOff : soundOn;
-            g2.drawImage(SoundTest, 150, 50, null);
+            g2.drawImage(SoundTest, 370, 320, null);
+
+            g2.drawImage(returnImg, 600, 30, null);
 
         }
 
