@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -21,6 +22,7 @@ public class Handle extends GameScreen {
     private BufferedImage bg;
     private BufferedImage gameOverimg;
     private BufferedImage highScoreimg;
+    private BufferedImage Table;
 
     private BufferedImage settingImg;
     private BufferedImage returnImg;
@@ -53,12 +55,18 @@ public class Handle extends GameScreen {
 
     private int CurrentScreen = BEGIN_SCREEN;
 
-    private int point = 0;
+    private Table table;
 
-    public static Bird h = new Bird();
+    private int point = 0;
+    public int max = 0;
+
+    private Data data;
 
     public Handle() {
         super(800, 600);
+
+        data = new Data();
+        table = new Table();
 
         try {
             birds = ImageIO.read(new File("Stock/bird_sprite.png"));
@@ -67,6 +75,7 @@ public class Handle extends GameScreen {
             settingImg = ImageIO.read(new File("Stock/setting.png"));
             returnImg = ImageIO.read(new File("Stock/return.png"));
             highScoreimg = ImageIO.read(new File("Stock/highScore.png"));
+            Table = ImageIO.read(new File("Stock/STT.png"));
 
             musicSprite = ImageIO.read(new File("Stock/music.png"));
             musicOn = musicSprite.getSubimage(0, 0, 60, 60);
@@ -135,6 +144,12 @@ public class Handle extends GameScreen {
                         showSettings = !showSettings;
                     }
                 }
+                if (CurrentScreen == HIGHSCORE_SCREEN) {
+                    if (e.getX() >= 600 && e.getX() <= 600 + returnImg.getWidth() &&
+                            e.getY() >= 30 && e.getY() <= 30 + returnImg.getHeight()) {
+                        CurrentScreen = SETTING_SCREEN;
+                    }
+                }
 
             }
         });
@@ -152,6 +167,7 @@ public class Handle extends GameScreen {
         bird.setLive(true);
         pipeGroup.resetPipes();
         point = 0;
+        max = 0;
 
     }
 
@@ -181,6 +197,8 @@ public class Handle extends GameScreen {
                 if (bird.getPosX() > pipeGroup.getPipe(i).getPosX() && pipeGroup.getPipe(i).isPass() == false
                         && i % 2 == 0) {
                     point++;
+                    max = point;
+
                     pipeGroup.getPipe(i).setPass(true);
                     if (!turnonMusic)
                         bird.pointSound.play();
@@ -195,7 +213,10 @@ public class Handle extends GameScreen {
             }
 
         }
-        if (CurrentScreen == SETTING_SCREEN) {
+        if (CurrentScreen == GAMEOVER_SCREEN) {
+            data.SaveScore(max);
+        }
+        if (CurrentScreen == HIGHSCORE_SCREEN) {
 
         }
 
@@ -218,6 +239,18 @@ public class Handle extends GameScreen {
             g2.drawImage(settingImg, 100, 50, null);
         }
 
+        if (CurrentScreen == HIGHSCORE_SCREEN) {
+            g2.drawImage(Table, 0, 0, getWidth(), getHeight(), null);
+            g2.setColor(Color.black);
+            g2.setFont(new Font("Arial", Font.BOLD, 50));
+            int y = 270;
+            for (int i = 0; i < table.getTopScores().size(); i++) {
+                g2.drawString((i + 1) + "         " + table.getTopScores().get(i), 300, y);
+                y += 50;
+            }
+            g2.drawImage(returnImg, 600, 30, null);
+        }
+
         if (CurrentScreen == SETTING_SCREEN) {
             BufferedImage MusicTest = turnonMusic ? musicOff : musicOn;
             g2.drawImage(MusicTest, 370, 400, null);
@@ -228,9 +261,7 @@ public class Handle extends GameScreen {
             g2.drawImage(returnImg, 600, 30, null);
 
             g2.drawImage(highScoreimg, 370, 240, rootPane);
-            if (CurrentScreen == HIGHSCORE_SCREEN) {
-                System.out.println("Thanh cong");
-            }
+
         }
 
         if (CurrentScreen == GAMEOVER_SCREEN) {
