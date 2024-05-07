@@ -200,7 +200,7 @@ public class Handle extends GameScreen {
 
         pipeGroup.paint(g2);
         if (CurrentScreen != SETTING_SCREEN) {
-            if (!bird.getIsFlying()) {
+            if (!bird.getIsFlying() || CurrentScreen == BEGIN_SCREEN) {
                 bird_anim.PaintAnims((int) bird.getPosX(), (int) bird.getPosY(), birds, g2, 0, 0);
             } else {
                 bird_anim.PaintAnims((int) bird.getPosX(), (int) bird.getPosY(), birds, g2, 0, -1);
