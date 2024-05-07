@@ -214,7 +214,7 @@ public class Handle extends GameScreen {
 
         }
         if (CurrentScreen == GAMEOVER_SCREEN) {
-            data.SaveScore(max);
+
         }
         if (CurrentScreen == HIGHSCORE_SCREEN) {
 
@@ -244,8 +244,8 @@ public class Handle extends GameScreen {
             g2.setColor(Color.black);
             g2.setFont(new Font("Arial", Font.BOLD, 50));
             int y = 270;
-            for (int i = 0; i < table.getTopScores().size(); i++) {
-                g2.drawString((i + 1) + "         " + table.getTopScores().get(i), 300, y);
+            for (int i = 0; i < table.getTopScoresAsync().join().size(); i++) {
+                g2.drawString((i + 1) + "         " + table.getTopScoresAsync().join().get(i), 300, y);
                 y += 50;
             }
             g2.drawImage(returnImg, 600, 30, null);
@@ -266,6 +266,7 @@ public class Handle extends GameScreen {
 
         if (CurrentScreen == GAMEOVER_SCREEN) {
             g2.drawImage(gameOverimg, 300, 240, 200, 120, null);
+            data.saveScoreAsync(max).join();
         }
 
         if (CurrentScreen == GAMEOVER_SCREEN || CurrentScreen == GAMEPLAY_SCREEN) {
