@@ -9,6 +9,27 @@
             "name": "main",
             "request": "launch",
             "mainClass": "PlayGameInHere.main",
+            "projectName": "FlappyBird_QHaiz"
+        },
+        {
+            "type": "java",
+            "name": "Data",
+            "request": "launch",
+            "mainClass": "Panel.Data",
+            "projectName": "FlappyBird_QHaiz"
+        },
+        {
+            "type": "java",
+            "name": "Data",
+            "request": "launch",
+            "mainClass": "Panel.Data",
+            "projectName": "FlappyBird_QHaiz_a3d3165"
+        },
+        {
+            "type": "java",
+            "name": "main",
+            "request": "launch",
+            "mainClass": "PlayGameInHere.main",
             "projectName": "FlappyBird_QHaiz_a3d3165"
         },
         {

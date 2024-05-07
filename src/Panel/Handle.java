@@ -20,6 +20,7 @@ public class Handle extends GameScreen {
     private Animation bird_anim;
     private BufferedImage bg;
     private BufferedImage gameOverimg;
+    private BufferedImage highScoreimg;
 
     private BufferedImage settingImg;
     private BufferedImage returnImg;
@@ -65,6 +66,7 @@ public class Handle extends GameScreen {
             gameOverimg = ImageIO.read(new File("Stock/gameOver2.png"));
             settingImg = ImageIO.read(new File("Stock/setting.png"));
             returnImg = ImageIO.read(new File("Stock/return.png"));
+            highScoreimg = ImageIO.read(new File("Stock/highScore.png"));
 
             musicSprite = ImageIO.read(new File("Stock/music.png"));
             musicOn = musicSprite.getSubimage(0, 0, 60, 60);
@@ -112,6 +114,11 @@ public class Handle extends GameScreen {
                             bird.soundTrack.stop();
                         }
                     }
+                    if (e.getX() >= 370 && e.getX() <= 370 + highScoreimg.getWidth() &&
+                            e.getY() >= 240 && e.getY() <= 240 + highScoreimg.getHeight()) {
+                        CurrentScreen = HIGHSCORE_SCREEN;
+                    }
+
                     if (e.getX() >= 600 && e.getX() <= 600 + returnImg.getWidth() &&
                             e.getY() >= 30 && e.getY() <= 30 + returnImg.getHeight()) {
                         CurrentScreen = BEGIN_SCREEN;
@@ -199,7 +206,7 @@ public class Handle extends GameScreen {
         g2.drawImage(bg, 0, 0, getWidth(), 600, null);
 
         pipeGroup.paint(g2);
-        if (CurrentScreen != SETTING_SCREEN) {
+        if (CurrentScreen != SETTING_SCREEN && CurrentScreen != HIGHSCORE_SCREEN) {
             if (!bird.getIsFlying() || CurrentScreen == BEGIN_SCREEN) {
                 bird_anim.PaintAnims((int) bird.getPosX(), (int) bird.getPosY(), birds, g2, 0, 0);
             } else {
@@ -220,6 +227,10 @@ public class Handle extends GameScreen {
 
             g2.drawImage(returnImg, 600, 30, null);
 
+            g2.drawImage(highScoreimg, 370, 240, rootPane);
+            if (CurrentScreen == HIGHSCORE_SCREEN) {
+                System.out.println("Thanh cong");
+            }
         }
 
         if (CurrentScreen == GAMEOVER_SCREEN) {
