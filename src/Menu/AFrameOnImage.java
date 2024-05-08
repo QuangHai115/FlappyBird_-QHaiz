@@ -18,9 +18,9 @@ public class AFrameOnImage {
         DimsBounds[3] = h;
     }
 
-    public void VisibleRectDebug(boolean enable) {
-        enablePaintRect = enable;
-    }
+    // public void VisibleRectDebug(boolean enable) {
+    // enablePaintRect = enable;
+    // }
 
     public int[] GetBounds() {
         return DimsBounds;
@@ -38,12 +38,6 @@ public class AFrameOnImage {
         imageDraw = op.filter(imageDraw, null);
 
         g2.drawImage(imageDraw, x, y, null);
-
-        if (enablePaintRect)
-            PaintBound(g2);
     }
 
-    private void PaintBound(Graphics2D g) {
-
-    }
 }

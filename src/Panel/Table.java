@@ -53,4 +53,5 @@ public class Table {
 
         return topScores;
     }
+
 }

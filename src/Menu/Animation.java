@@ -15,7 +15,7 @@ public class Animation {
         this.mesure = mesure;
     }
 
-    public void Update_Me(long deltaTime) {
+    public void Update(long deltaTime) {
         if (frames != null && NumOfFrame > 0) {
             if (deltaTime - beginTime > mesure) {
                 CurrentFrame++;

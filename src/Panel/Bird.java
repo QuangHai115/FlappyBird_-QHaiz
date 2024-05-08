@@ -70,7 +70,7 @@ public class Bird extends Objects {
     }
 
     public void fly() {
-        vt = -4;
+        vt = -3;
         if (!Handle.turnonMusic)
             flapSound.play();
 

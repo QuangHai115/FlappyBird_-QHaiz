@@ -61,6 +61,7 @@ public class Handle extends GameScreen {
     public int max = 0;
 
     private Data data;
+    public int min = 9999999;
 
     public Handle() {
         super(800, 600);
@@ -178,7 +179,7 @@ public class Handle extends GameScreen {
             reStart();
         } else if (CurrentScreen == GAMEPLAY_SCREEN) {
             if (bird.isLive())
-                bird_anim.Update_Me(deltaTime);
+                bird_anim.Update(deltaTime);
             bird.update(deltaTime);
             pipeGroup.Update();
 
@@ -195,7 +196,8 @@ public class Handle extends GameScreen {
                 if (bird.getPosX() > pipeGroup.getPipe(i).getPosX() && pipeGroup.getPipe(i).isPass() == false
                         && i % 2 == 0) {
                     point++;
-                    max = point;
+                    if (point > min)
+                        max = point;
 
                     pipeGroup.getPipe(i).setPass(true);
                     if (!turnonMusic)
@@ -203,7 +205,7 @@ public class Handle extends GameScreen {
                 }
             }
 
-            if (bird.getPosY() + bird.getH() > 596) {
+            if (bird.getPosY() + bird.getH() > 600) {
                 CurrentScreen = GAMEOVER_SCREEN;
                 if (!turnonMusic)
                     bird.collideSound.play();
@@ -237,9 +239,13 @@ public class Handle extends GameScreen {
             g2.setColor(Color.black);
             g2.setFont(new Font("Arial", Font.BOLD, 50));
             int y = 270;
+
             for (int i = 0; i < table.getTopScores().size(); i++) {
                 g2.drawString((i + 1) + "         " + table.getTopScores().get(i), 300, y);
                 y += 50;
+                if (table.getTopScores().get(i) > min) {
+                    min = table.getTopScores().get(i);
+                }
             }
             g2.drawImage(returnImg, 600, 30, null);
         }

@@ -18,18 +18,6 @@ public class Objects {
         this.h = h;
     }
 
-    public boolean isCollisionHappenWith(float x, float y) {
-        if (x > posX && x < posX + w && y > posY && y < posY + h)
-            return true;
-        return false;
-    }
-
-    public boolean isCollisionHappenWith(float x, float y, float w, float h) {
-        if (x < posX + this.w && x + w > posX && y < posY + this.h && h + y > posY)
-            return true;
-        return false;
-    }
-
     public void setPos(float x, float y) {
         posX = x;
         posY = y;
@@ -60,11 +48,4 @@ public class Objects {
         return h;
     }
 
-    public void increasePosX(float m) {
-        posX += m;
-    }
-
-    public void increasePosY(float m) {
-        posY += m;
-    }
 }
