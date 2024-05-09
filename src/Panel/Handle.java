@@ -8,9 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-
 import javax.imageio.ImageIO;
+
+import ConnectData.*;
 
 import java.awt.event.MouseEvent;
 
@@ -61,7 +61,7 @@ public class Handle extends GameScreen {
     public int max = 0;
 
     private Data data;
-    public int min = 9999999;
+    public int minSQL = 9999999;
 
     public Handle() {
         super(800, 600);
@@ -196,7 +196,7 @@ public class Handle extends GameScreen {
                 if (bird.getPosX() > pipeGroup.getPipe(i).getPosX() && pipeGroup.getPipe(i).isPass() == false
                         && i % 2 == 0) {
                     point++;
-                    if (point > min)
+                    if (point > minSQL)
                         max = point;
 
                     pipeGroup.getPipe(i).setPass(true);
@@ -243,8 +243,8 @@ public class Handle extends GameScreen {
             for (int i = 0; i < table.getTopScores().size(); i++) {
                 g2.drawString((i + 1) + "         " + table.getTopScores().get(i), 300, y);
                 y += 50;
-                if (table.getTopScores().get(i) > min) {
-                    min = table.getTopScores().get(i);
+                if (table.getTopScores().get(i) > minSQL) {
+                    minSQL = table.getTopScores().get(i);
                 }
             }
             g2.drawImage(returnImg, 600, 30, null);

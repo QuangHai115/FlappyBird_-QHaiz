@@ -3,7 +3,6 @@ package Menu;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
 public abstract class GameScreen extends JFrame implements KeyListener {
@@ -21,14 +20,6 @@ public abstract class GameScreen extends JFrame implements KeyListener {
     public GameScreen() {
         InitThread();
         InitScreen();
-    }
-
-    public void RegisterImage(int id, BufferedImage image) {
-
-    }
-
-    public BufferedImage getImageWithID(int id) {
-        return null;
     }
 
     public GameScreen(int w, int h) {

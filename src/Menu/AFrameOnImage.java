@@ -7,8 +7,6 @@ import java.awt.image.BufferedImage;
 
 public class AFrameOnImage {
 
-    private boolean enablePaintRect = false;
-
     private int[] DimsBounds = new int[4];
 
     public AFrameOnImage(int xOnImage, int yOnImage, int w, int h) {
@@ -17,10 +15,6 @@ public class AFrameOnImage {
         DimsBounds[2] = w;
         DimsBounds[3] = h;
     }
-
-    // public void VisibleRectDebug(boolean enable) {
-    // enablePaintRect = enable;
-    // }
 
     public int[] GetBounds() {
         return DimsBounds;
